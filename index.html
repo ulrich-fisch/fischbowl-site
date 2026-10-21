@@ -337,10 +337,11 @@ const ROLES={
  director:{en:"Director",af:"Regisseur"},producer:{en:"Producer",af:"Vervaardiger"},
  dop:{en:"Director of photography",af:"Kinematograaf"},camera:{en:"Camera operator",af:"Kamera-operateur"},
  editor:{en:"Editor",af:"Redigeerder"},colour:{en:"Colourist",af:"Kleurgradeerder"},
- sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"}};
+ ad1:{en:"1st Assistant Director",af:"1ste Assistent-regisseur"},sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"}};
 // k: "prod" = a Fischbowl production, "crew" = a specific role on someone else's project
 const projects=[
- {k:"prod",c:"mus",yt:"n039XBC-5fc",en:"Black Heidi – I'm Fine",af:"Black Heidi – I'm Fine",y:"2024",roles:["director","dop","editor","colour"]}];
+ {k:"prod",c:"mus",yt:"n039XBC-5fc",en:"Black Heidi – I'm Fine",af:"Black Heidi – I'm Fine",y:"2024",roles:["director","dop","editor","colour"]},
+ {k:"crew",c:"mus",yt:"E6Ar3LcFszY",en:"Ons – Lag",af:"Ons – Lag",y:"2024",roles:["ad1"]}];
 let kind="all";
 function tidyFilters(){
  document.querySelectorAll(".filters.cat button[data-f]").forEach(b=>{b.hidden=b.dataset.f!=="all"&&!projects.some(p=>p.c===b.dataset.f);});
