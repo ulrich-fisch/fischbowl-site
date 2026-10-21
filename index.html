@@ -93,6 +93,11 @@ section{padding-block:72px;border-top:1px solid var(--line)}
 .card:hover .play{transform:scale(1.12)}
 .thumb .slug{position:absolute;left:10px;top:10px;font:500 11px var(--f-mono);letter-spacing:.06em;background:var(--surface);color:var(--ink);padding:3px 7px;border-radius:3px}
 .card h3{font-size:26px}
+.credit{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.credit .tag{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.credit .tag.own{border-color:var(--accent);color:var(--accent)}
+.filters.kind{margin-bottom:10px}
+.filters.kind button{font-weight:600}
 .meta{display:flex;justify-content:space-between;gap:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .note{margin-top:28px;font-size:14px;color:var(--muted);border:1px dashed var(--line);padding:12px 16px;border-radius:6px}
 
@@ -196,9 +201,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="wrap">
       <div class="shead">
         <h2 data-i="work_h">Selected work</h2>
-        <p data-i="work_p">A few projects from the last five years. Click one to watch it.</p>
+        <p data-i="work_p">Our own productions, plus projects where we worked a specific role on set or in the edit. Click one to watch it.</p>
       </div>
-      <div class="filters" role="group" aria-label="Filter">
+      <div class="filters kind" role="group" aria-label="Show">
+        <button id="k-all" aria-pressed="true" data-k="all" data-i="k_all">All work</button>
+        <button id="k-prod" aria-pressed="false" data-k="prod" data-i="k_prod">Our productions</button>
+        <button id="k-crew" aria-pressed="false" data-k="crew" data-i="k_crew">Crew roles</button>
+      </div>
+      <div class="filters cat" role="group" aria-label="Filter">
         <button id="f-all" aria-pressed="true" data-f="all" data-i="f_all">All</button>
         <button id="f-film" aria-pressed="false" data-f="film" data-i="f_film">Film &amp; series</button>
         <button id="f-doc" aria-pressed="false" data-f="doc" data-i="f_doc">Documentary</button>
@@ -284,8 +294,8 @@ eyebrow:"Produksie- & mediahuis · Pretoria",
 h1:"Stories wat die <em>moeite werd is.</em>",
 lede:"Fischbowl maak films, video en inhoud in Afrikaans en Engels, van die eerste idee tot die finale kleurgradering.",
 cta_reel:"Kyk na ons werk",cta_talk:"Begin 'n projek",
-work_h:"Gekose werk",work_p:"'n Paar projekte van die afgelope vyf jaar. Klik op een om dit te kyk.",
-f_all:"Alles",f_film:"Film & reekse",f_doc:"Dokumentêr",f_com:"Advertensies",f_mus:"Musiekvideo",
+work_h:"Gekose werk",work_p:"Ons eie produksies, asook projekte waar ons 'n spesifieke rol op stel of in die redigeerkamer vervul het. Klik op een om dit te kyk.",
+f_all:"Alles",k_all:"Alle werk",k_prod:"Ons produksies",k_crew:"Spanrolle",own:"Fischbowl-produksie",f_film:"Film & reekse",f_doc:"Dokumentêr",f_com:"Advertensies",f_mus:"Musiekvideo",
 work_note:"Voorbeelde. Jou regte projektitels, foto's en videoskakels kom hier.",
 svc_h:"Wat ons maak",svc_p:"Een span vir die hele projek, of net die deel wat jy nodig het.",
 s1_h:"Film & reekse",s1_p:"Kortfilms, drama en reekse, geskryf en geskiet vir plaaslike kykers.",
@@ -309,23 +319,32 @@ foot:"Gemaak in Pretoria",fm_ok:"Dankie! Jou boodskap is gestuur.",fm_err:"Die b
 // capture English from the page itself
 document.querySelectorAll("[data-i]").forEach(e=>T.en[e.dataset.i]=e.textContent);
 document.querySelectorAll("[data-i-html]").forEach(e=>T.en[e.dataset.iHtml]=e.innerHTML);
-T.en.copied="Copied";T.en.fm_ok="Thanks! Your message has been sent.";T.en.fm_err="The message couldn't be sent. Try again, or send an email.";T.en.fm_need="Please fill in your name and email address.";
+T.en.copied="Copied";T.en.own="Fischbowl production";T.en.fm_ok="Thanks! Your message has been sent.";T.en.fm_err="The message couldn't be sent. Try again, or send an email.";T.en.fm_need="Please fill in your name and email address.";
 
+// Roles you can credit. Add more here if needed.
+const ROLES={
+ director:{en:"Director",af:"Regisseur"},producer:{en:"Producer",af:"Vervaardiger"},
+ dop:{en:"Director of photography",af:"Kinematograaf"},camera:{en:"Camera operator",af:"Kamera-operateur"},
+ editor:{en:"Editor",af:"Redigeerder"},colour:{en:"Colourist",af:"Kleurgradeerder"},
+ sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"}};
+// k: "prod" = a Fischbowl production, "crew" = a specific role on someone else's project
 const projects=[
- {c:"film",en:"Short film title",af:"Kortfilm-titel",t:"00:14:32",fmt:"4K · 2.39:1",y:"2025"},
- {c:"doc",en:"Documentary title",af:"Dokumentêr-titel",t:"00:26:10",fmt:"4K · 16:9",y:"2025"},
- {c:"com",en:"Brand film",af:"Handelsmerkfilm",t:"00:01:00",fmt:"4K · 16:9",y:"2024"},
- {c:"mus",en:"Music video",af:"Musiekvideo",t:"00:03:48",fmt:"4K · 2.39:1",y:"2024"},
- {c:"film",en:"Series episode",af:"Reeks-episode",t:"00:24:00",fmt:"HD · 16:9",y:"2023"},
- {c:"com",en:"Social campaign",af:"Sosiale veldtog",t:"00:00:30",fmt:"HD · 9:16",y:"2023"}];
+ {k:"prod",c:"film",en:"Short film title",af:"Kortfilm-titel",t:"00:14:32",fmt:"4K · 2.39:1",y:"2025",roles:["director","producer"]},
+ {k:"crew",c:"doc",en:"Documentary title",af:"Dokumentêr-titel",t:"00:26:10",fmt:"4K · 16:9",y:"2025",roles:["editor","colour"]},
+ {k:"prod",c:"com",en:"Brand film",af:"Handelsmerkfilm",t:"00:01:00",fmt:"4K · 16:9",y:"2024",roles:["director","editor"]},
+ {k:"crew",c:"mus",en:"Music video",af:"Musiekvideo",t:"00:03:48",fmt:"4K · 2.39:1",y:"2024",roles:["dop"]},
+ {k:"crew",c:"film",en:"Series episode",af:"Reeks-episode",t:"00:24:00",fmt:"HD · 16:9",y:"2023",roles:["camera"]},
+ {k:"crew",c:"com",en:"Social campaign",af:"Sosiale veldtog",t:"00:00:30",fmt:"HD · 9:16",y:"2023",roles:["editor"]}];
+let kind="all";
 let lang="en",filter="all";
 function renderGrid(){
  const g=document.getElementById("grid");
- g.innerHTML=projects.filter(p=>filter==="all"||p.c===filter).map(p=>`
+ g.innerHTML=projects.filter(p=>(filter==="all"||p.c===filter)&&(kind==="all"||p.k===kind)).map(p=>`
  <a class="card" href="#work" aria-label="${p[lang]}">
   <div class="thumb"><span class="slug">${p.fmt}</span><div class="ph">${T[lang]["f_"+p.c]||T.en["f_"+p.c]}</div>
    <span class="play"><svg viewBox="0 0 12 12"><path d="M1 0l11 6-11 6z"/></svg></span></div>
   <h3>${p[lang]}</h3>
+  <div class="credit">${p.k==="prod"?`<span class="tag own">${T[lang].own||T.en.own}</span>`:""}${p.roles.map(r=>`<span class="tag">${ROLES[r][lang]}</span>`).join("")}</div>
   <div class="meta"><span>${T[lang]["f_"+p.c]||T.en["f_"+p.c]}</span><span>${p.y} · TC ${p.t}</span></div>
  </a>`).join("");
 }
@@ -338,7 +357,8 @@ function setLang(l){
  try{localStorage.setItem("fb-lang",l)}catch(e){}
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
-document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid();});
+document.querySelectorAll(".filters.cat button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll(".filters.cat button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid();});
+document.querySelectorAll(".filters.kind button").forEach(b=>b.onclick=()=>{kind=b.dataset.k;document.querySelectorAll(".filters.kind button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid();});
 let saved="en";try{saved=localStorage.getItem("fb-lang")||"en"}catch(e){}
 setLang(saved);
 
