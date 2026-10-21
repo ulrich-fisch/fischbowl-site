@@ -337,7 +337,8 @@ const ROLES={
  director:{en:"Director",af:"Regisseur"},producer:{en:"Producer",af:"Vervaardiger"},
  dop:{en:"Director of photography",af:"Kinematograaf"},camera:{en:"Camera operator",af:"Kamera-operateur"},
  editor:{en:"Editor",af:"Redigeerder"},colour:{en:"Colourist",af:"Kleurgradeerder"},
- ad1:{en:"1st Assistant Director",af:"1ste Assistent-regisseur"},sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"}};
+ ad1:{en:"1st Assistant Director",af:"1ste Assistent-regisseur"},sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"},
+ cam1:{en:"1st Camera Assistant",af:"1ste Kamera-assistent"},mix:{en:"Sound mixing",af:"Klankmenging"}};
 // k: "prod" = a Fischbowl production, "crew" = a specific role on someone else's project
 const projects=[
  {k:"prod",c:"mus",yt:"O5MB_K8JbRE",en:"Black Heidi – You Are The Man",af:"Black Heidi – You Are The Man",y:"2025",roles:["director","dop","editor","colour"]},
@@ -364,7 +365,7 @@ function renderGrid(){
   <div class="thumb"><div class="ph">${cat}</div>${thumb}${p.fmt?`<span class="slug">${p.fmt}</span>`:""}
    <span class="play"><svg viewBox="0 0 12 12"><path d="M1 0l11 6-11 6z"/></svg></span></div>
   <h3>${p[lang]}</h3>
-  <div class="credit">${p.k==="prod"?`<span class="tag own">${T[lang].own||T.en.own}</span>`:""}${p.roles.map(r=>`<span class="tag">${ROLES[r][lang]}</span>`).join("")}</div>
+  <div class="credit">${p.k==="prod"?`<span class="tag own">${T[lang].own||T.en.own}</span>`:""}${p.roles.map(r=>`<span class="tag">${(ROLES[r]||{})[lang]||r}</span>`).join("")}</div>
   <div class="meta"><span>${cat}</span><span>${meta}</span></div>
  </a>`;}).join("");
 }
