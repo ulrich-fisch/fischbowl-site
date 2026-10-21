@@ -6,8 +6,17 @@
 <title>Fischbowl Productions</title>
 <meta name="description" content="Fischbowl Productions – films, music videos and documentaries in Afrikaans and English. Pretoria, South Africa.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://fischbowlpro.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fischbowlpro.com/">
+<meta property="og:site_name" content="Fischbowl Productions">
 <meta property="og:title" content="Fischbowl Productions">
 <meta property="og:description" content="Small bowl. Big picture. Films, music videos and documentaries in Afrikaans and English.">
+<meta property="og:image" content="https://fischbowlpro.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fischbowl Productions logo with the line Small bowl. Big picture.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -136,6 +145,7 @@ label{display:grid;gap:6px;font-size:14px;font-weight:500}
 input,select,textarea{font:16px var(--f-body);padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);width:100%}
 textarea{min-height:120px;resize:vertical}
 .sent{color:var(--accent);font-weight:600;margin:0}
+.fine{font-size:13px;color:var(--muted);margin:0}
 @media (max-width:860px){.contact{grid-template-columns:1fr;gap:32px}}
 
 dialog.player{border:0;padding:0;background:#000;width:min(1100px,94vw);max-width:94vw;border-radius:8px;overflow:visible}
@@ -288,6 +298,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           </select></label>
         <label for="c-msg"><span data-i="fm_msg">Tell us the story</span><textarea id="c-msg"></textarea></label>
         <button class="btn primary" type="submit" style="justify-self:start" data-i="fm_send">Send message</button>
+        <p class="fine"><span data-i="fm_priv">We only use your details to reply to you.</span> <a href="privacy.html" data-i="priv">Privacy notice</a></p>
         <p class="sent" id="sent" hidden data-i="fm_sent">Preview only: the form will be connected when the site goes live.</p>
       </form>
     </div>
@@ -300,7 +311,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <a class="yt" id="player-yt" href="#" target="_blank" rel="noopener" data-i="on_yt">Watch on YouTube</a>
 </dialog>
 
-<footer><div class="wrap"><span>© 2026 Fischbowl</span><div class="social" aria-label="Social media"><a href="https://www.instagram.com/_fischbowl_/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a><a href="https://www.youtube.com/@Fischbowl_pro" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a><a href="https://www.facebook.com/fischbowlpro/" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a></div><span data-i="foot">Made in Pretoria. No fish were harmed.</span></div></footer>
+<footer><div class="wrap"><span>© 2026 Fischbowl</span><div class="social" aria-label="Social media"><a href="https://www.instagram.com/_fischbowl_/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a><a href="https://www.youtube.com/@Fischbowl_pro" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a><a href="https://www.facebook.com/fischbowlpro/" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a></div><a href="privacy.html" data-i="priv" style="color:inherit">Privacy notice</a><span data-i="foot">Made in Pretoria. No fish were harmed.</span></div></footer>
 
 <script>
 const T={
@@ -330,7 +341,7 @@ ab_p3:"Ons bou ook Stroom, 'n stroomdiens vir Afrikaanse films, reekse en kultuu
 ct_h:"Kom ons maak iets.",ct_p:"Vertel ons van jou projek. Ons antwoord gewoonlik binne een werksdag, vinniger as jy versnaperinge noem.",
 copy:"Kopieer",copied:"Gekopieer",fm_name:"Naam",fm_email:"E-pos",fm_type:"Soort projek",fm_other:"Iets anders",
 fm_msg:"Vertel ons die storie",fm_send:"Stuur boodskap",fm_sent:"Net 'n voorskou: die vorm word gekoppel wanneer die webwerf regstreeks gaan.",
-foot:"Gemaak in Pretoria. Geen visse is beseer nie.",close:"Maak toe ✕",on_yt:"Kyk op YouTube",fm_ok:"Dankie! Jou boodskap is in die bak. Ons kom gou terug na jou toe.",fm_err:"Die boodskap kon nie gestuur word nie. Probeer weer, of stuur 'n e-pos.",fm_need:"Vul asseblief jou naam en e-posadres in."
+fm_priv:"Ons gebruik jou besonderhede net om jou te antwoord.",priv:"Privaatheidskennisgewing",foot:"Gemaak in Pretoria. Geen visse is beseer nie.",close:"Maak toe ✕",on_yt:"Kyk op YouTube",fm_ok:"Dankie! Jou boodskap is in die bak. Ons kom gou terug na jou toe.",fm_err:"Die boodskap kon nie gestuur word nie. Probeer weer, of stuur 'n e-pos.",fm_need:"Vul asseblief jou naam en e-posadres in."
 }};
 // capture English from the page itself
 document.querySelectorAll("[data-i]").forEach(e=>T.en[e.dataset.i]=e.textContent);
