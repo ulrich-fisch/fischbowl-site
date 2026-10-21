@@ -87,6 +87,7 @@ section{padding-block:72px;border-top:1px solid var(--line)}
 @media (max-width:560px){.grid{grid-template-columns:1fr}}
 .card{display:flex;flex-direction:column;gap:10px;text-decoration:none;min-width:0}
 .thumb{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:6px;overflow:hidden;background:var(--glass)}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:100%}
 .thumb .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:28px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);opacity:.7}
 .thumb .play{position:absolute;right:12px;bottom:12px;width:40px;height:40px;border-radius:50%;background:var(--surface);display:grid;place-items:center;transition:transform .2s}
 .thumb .play svg{width:14px;height:14px;fill:var(--ink);margin-left:2px}
@@ -137,6 +138,12 @@ textarea{min-height:120px;resize:vertical}
 .sent{color:var(--accent);font-weight:600;margin:0}
 @media (max-width:860px){.contact{grid-template-columns:1fr;gap:32px}}
 
+dialog.player{border:0;padding:0;background:#000;width:min(1100px,94vw);max-width:94vw;border-radius:8px;overflow:visible}
+dialog.player::backdrop{background:rgba(3,10,25,.86)}
+dialog.player .frame{position:relative;aspect-ratio:16/9;max-width:100%}
+dialog.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:8px}
+dialog.player .x{position:absolute;top:-44px;right:0;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font:500 13px var(--f-mono);padding:6px 12px;border-radius:999px;cursor:pointer}
+dialog.player .yt{position:absolute;bottom:-34px;left:0;color:#cfe0f5;font:13px var(--f-body)}
 footer{border-top:1px solid var(--line);padding-block:28px;font-size:14px;color:var(--muted)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -216,7 +223,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <button id="f-mus" aria-pressed="false" data-f="mus" data-i="f_mus">Music video</button>
       </div>
       <div class="grid" id="grid"></div>
-      <p class="note" data-i="work_note">Example placeholders. Your real project titles, thumbnails and video links go here.</p>
     </div>
   </section>
 
@@ -283,6 +289,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </section>
 </main>
 
+<dialog class="player" id="player" aria-label="Video player">
+  <button class="x" id="player-x" type="button" data-i="close">Close ✕</button>
+  <div class="frame" id="player-frame"></div>
+  <a class="yt" id="player-yt" href="#" target="_blank" rel="noopener" data-i="on_yt">Watch on YouTube</a>
+</dialog>
+
 <footer><div class="wrap"><span>© 2026 Fischbowl</span><span data-i="foot">Made in Pretoria</span></div></footer>
 
 <script>
@@ -296,7 +308,6 @@ lede:"Fischbowl maak films, video en inhoud in Afrikaans en Engels, van die eers
 cta_reel:"Kyk na ons werk",cta_talk:"Begin 'n projek",
 work_h:"Gekose werk",work_p:"Ons eie produksies, asook projekte waar ons 'n spesifieke rol op stel of in die redigeerkamer vervul het. Klik op een om dit te kyk.",
 f_all:"Alles",k_all:"Alle werk",k_prod:"Ons produksies",k_crew:"Spanrolle",own:"Fischbowl-produksie",f_film:"Film & reekse",f_doc:"Dokumentêr",f_com:"Advertensies",f_mus:"Musiekvideo",
-work_note:"Voorbeelde. Jou regte projektitels, foto's en videoskakels kom hier.",
 svc_h:"Wat ons maak",svc_p:"Een span vir die hele projek, of net die deel wat jy nodig het.",
 s1_h:"Film & reekse",s1_p:"Kortfilms, drama en reekse, geskryf en geskiet vir plaaslike kykers.",
 s2_h:"Dokumentêr",s2_p:"Regte mense en regte plekke, vertel met geduld en sorg.",
@@ -314,7 +325,7 @@ ab_p3:"Ons bou ook Stroom, 'n stroomdiens vir Afrikaanse films, reekse en kultuu
 ct_h:"Kom ons maak iets.",ct_p:"Vertel ons van jou projek. Ons antwoord gewoonlik binne een werksdag.",
 copy:"Kopieer",copied:"Gekopieer",fm_name:"Naam",fm_email:"E-pos",fm_type:"Soort projek",fm_other:"Iets anders",
 fm_msg:"Jou projek",fm_send:"Stuur boodskap",fm_sent:"Net 'n voorskou: die vorm word gekoppel wanneer die webwerf regstreeks gaan.",
-foot:"Gemaak in Pretoria",fm_ok:"Dankie! Jou boodskap is gestuur.",fm_err:"Die boodskap kon nie gestuur word nie. Probeer weer, of stuur 'n e-pos.",fm_need:"Vul asseblief jou naam en e-posadres in."
+foot:"Gemaak in Pretoria",close:"Maak toe ✕",on_yt:"Kyk op YouTube",fm_ok:"Dankie! Jou boodskap is gestuur.",fm_err:"Die boodskap kon nie gestuur word nie. Probeer weer, of stuur 'n e-pos.",fm_need:"Vul asseblief jou naam en e-posadres in."
 }};
 // capture English from the page itself
 document.querySelectorAll("[data-i]").forEach(e=>T.en[e.dataset.i]=e.textContent);
@@ -329,24 +340,28 @@ const ROLES={
  sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"}};
 // k: "prod" = a Fischbowl production, "crew" = a specific role on someone else's project
 const projects=[
- {k:"prod",c:"film",en:"Short film title",af:"Kortfilm-titel",t:"00:14:32",fmt:"4K · 2.39:1",y:"2025",roles:["director","producer"]},
- {k:"crew",c:"doc",en:"Documentary title",af:"Dokumentêr-titel",t:"00:26:10",fmt:"4K · 16:9",y:"2025",roles:["editor","colour"]},
- {k:"prod",c:"com",en:"Brand film",af:"Handelsmerkfilm",t:"00:01:00",fmt:"4K · 16:9",y:"2024",roles:["director","editor"]},
- {k:"crew",c:"mus",en:"Music video",af:"Musiekvideo",t:"00:03:48",fmt:"4K · 2.39:1",y:"2024",roles:["dop"]},
- {k:"crew",c:"film",en:"Series episode",af:"Reeks-episode",t:"00:24:00",fmt:"HD · 16:9",y:"2023",roles:["camera"]},
- {k:"crew",c:"com",en:"Social campaign",af:"Sosiale veldtog",t:"00:00:30",fmt:"HD · 9:16",y:"2023",roles:["editor"]}];
+ {k:"prod",c:"mus",yt:"n039XBC-5fc",en:"Black Heidi – I'm Fine",af:"Black Heidi – I'm Fine",y:"2024",roles:["director","dop","editor","colour"]}];
 let kind="all";
+function tidyFilters(){
+ document.querySelectorAll(".filters.cat button[data-f]").forEach(b=>{b.hidden=b.dataset.f!=="all"&&!projects.some(p=>p.c===b.dataset.f);});
+ document.querySelectorAll(".filters.kind button[data-k]").forEach(b=>{b.hidden=b.dataset.k!=="all"&&!projects.some(p=>p.k===b.dataset.k);});
+ document.querySelectorAll(".filters").forEach(row=>{row.hidden=[...row.querySelectorAll("button")].filter(b=>!b.hidden).length<3;});
+}
 let lang="en",filter="all";
 function renderGrid(){
  const g=document.getElementById("grid");
- g.innerHTML=projects.filter(p=>(filter==="all"||p.c===filter)&&(kind==="all"||p.k===kind)).map(p=>`
- <a class="card" href="#work" aria-label="${p[lang]}">
-  <div class="thumb"><span class="slug">${p.fmt}</span><div class="ph">${T[lang]["f_"+p.c]||T.en["f_"+p.c]}</div>
+ g.innerHTML=projects.filter(p=>(filter==="all"||p.c===filter)&&(kind==="all"||p.k===kind)).map(p=>{
+  const cat=T[lang]["f_"+p.c]||T.en["f_"+p.c];
+  const thumb=p.yt?`<img src="https://img.youtube.com/vi/${p.yt}/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">`:"";
+  const meta=[p.y,p.t?"TC "+p.t:""].filter(Boolean).join(" · ");
+  return `
+ <a class="card" href="${p.yt?"https://youtu.be/"+p.yt:"#work"}" ${p.yt?`data-yt="${p.yt}"`:""} aria-label="${p[lang]}">
+  <div class="thumb"><div class="ph">${cat}</div>${thumb}${p.fmt?`<span class="slug">${p.fmt}</span>`:""}
    <span class="play"><svg viewBox="0 0 12 12"><path d="M1 0l11 6-11 6z"/></svg></span></div>
   <h3>${p[lang]}</h3>
   <div class="credit">${p.k==="prod"?`<span class="tag own">${T[lang].own||T.en.own}</span>`:""}${p.roles.map(r=>`<span class="tag">${ROLES[r][lang]}</span>`).join("")}</div>
-  <div class="meta"><span>${T[lang]["f_"+p.c]||T.en["f_"+p.c]}</span><span>${p.y} · TC ${p.t}</span></div>
- </a>`).join("");
+  <div class="meta"><span>${cat}</span><span>${meta}</span></div>
+ </a>`;}).join("");
 }
 function setLang(l){
  lang=l;document.documentElement.lang=l;
@@ -359,6 +374,7 @@ function setLang(l){
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 document.querySelectorAll(".filters.cat button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll(".filters.cat button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid();});
 document.querySelectorAll(".filters.kind button").forEach(b=>b.onclick=()=>{kind=b.dataset.k;document.querySelectorAll(".filters.kind button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid();});
+tidyFilters();
 let saved="en";try{saved=localStorage.getItem("fb-lang")||"en"}catch(e){}
 setLang(saved);
 
@@ -367,6 +383,19 @@ document.getElementById("copy").onclick=async e=>{
  try{await navigator.clipboard.writeText("ulrich@fischbowlpro.com");btn.textContent=T[lang].copied;}
  catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById("addr"));const s=getSelection();s.removeAllRanges();s.addRange(r);}
 };
+// Video pop-up: plays YouTube on the site itself
+const dlg=document.getElementById("player"),vframe=document.getElementById("player-frame");
+function openVideo(id){
+ vframe.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+ document.getElementById("player-yt").href="https://youtu.be/"+id;
+ if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","");
+}
+function closeVideo(){vframe.innerHTML="";if(dlg.open)dlg.close();}
+document.getElementById("grid").addEventListener("click",e=>{const c=e.target.closest("[data-yt]");if(!c)return;e.preventDefault();openVideo(c.dataset.yt);});
+document.getElementById("player-x").onclick=closeVideo;
+dlg.addEventListener("click",e=>{if(e.target===dlg)closeVideo();});
+dlg.addEventListener("close",()=>{vframe.innerHTML="";});
+
 // Contact form: sends through Web3Forms once the key below is filled in (same free service as Stroom)
 const WEB3FORMS_KEY="8422ee05-4316-45bb-8cb1-f024e4bfdbe2";
 document.getElementById("cform").onsubmit=async e=>{
