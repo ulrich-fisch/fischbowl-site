@@ -340,8 +340,12 @@ const ROLES={
  ad1:{en:"1st Assistant Director",af:"1ste Assistent-regisseur"},sound:{en:"Sound",af:"Klank"},drone:{en:"Drone operator",af:"Hommeltuig-operateur"}};
 // k: "prod" = a Fischbowl production, "crew" = a specific role on someone else's project
 const projects=[
+ {k:"prod",c:"mus",yt:"O5MB_K8JbRE",en:"Black Heidi – You Are The Man",af:"Black Heidi – You Are The Man",y:"2025",roles:["director","dop","editor","colour"]},
  {k:"prod",c:"mus",yt:"n039XBC-5fc",en:"Black Heidi – I'm Fine",af:"Black Heidi – I'm Fine",y:"2024",roles:["director","dop","editor","colour"]},
- {k:"crew",c:"mus",yt:"E6Ar3LcFszY",en:"Ons – Lag",af:"Ons – Lag",y:"2024",roles:["ad1"]}];
+ {k:"crew",c:"doc",yt:"NKKp3nHvBdE",en:"Running Dry – A Nation on the Brink",af:"Running Dry – A Nation on the Brink",y:"2024",roles:["editor","mix","colour"]},
+ {k:"crew",c:"mus",yt:"E6Ar3LcFszY",en:"Ons – Lag",af:"Ons – Lag",y:"2024",roles:["ad1"]},
+ {k:"crew",c:"mus",yt:"pHKAu-afQSQ",en:"Rowwe Bliksem – Riaan Benadé en Jay",af:"Rowwe Bliksem – Riaan Benadé en Jay",y:"2022",roles:["producer","cam1"]},
+ {k:"crew",c:"doc",yt:"lO6zBAWVYK4",en:"Tussen die duiwel en die diep, blou see",af:"Tussen die duiwel en die diep, blou see",y:"2022",roles:["camera","editor","sound"]}];
 let kind="all";
 function tidyFilters(){
  document.querySelectorAll(".filters.cat button[data-f]").forEach(b=>{b.hidden=b.dataset.f!=="all"&&!projects.some(p=>p.c===b.dataset.f);});
