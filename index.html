@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fischbowl Productions</title>
+<meta name="description" content="Fischbowl Productions – film, video and content in Afrikaans and English. Pretoria, South Africa.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Fischbowl Productions">
+<meta property="og:description" content="Film, video and content in Afrikaans and English.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a round "porthole" lens opens the page; work reads like a contact sheet with timecode and format slugs; everything else stays quiet. */
+:root{
+  --bg:#f2f6fb; --surface:#ffffff; --ink:#0b2147; --muted:#4d6386; --line:#d3deec;
+  --accent:#1150a8; --accent-ink:#ffffff; --glass:#dde9f6; --glow:#6fb6e8;
+  --brand1:#18a0de; --brand2:#0f48a0; --word:#1048a0;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Hanken Grotesk","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --wrap:1180px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#06122a; --surface:#0c1d3b; --ink:#e8f0fb; --muted:#93a8c8; --line:#1b2f52;
+  --accent:#3fb2ea; --accent-ink:#04122a; --glass:#0f2547; --glow:#1d6fc0; --word:#e8f0fb; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#06122a; --surface:#0c1d3b; --ink:#e8f0fb; --muted:#93a8c8; --line:#1b2f52;
+  --accent:#3fb2ea; --accent-ink:#04122a; --glass:#0f2547; --glow:#1d6fc0; --word:#e8f0fb; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:.95;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance;margin:0}
+.label{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--word)}
+.logo svg{width:44px;height:auto;flex:none}
+.logo .wm{display:grid;font-family:var(--f-display);text-transform:uppercase;line-height:1}
+.logo .wm b{font-weight:700;font-size:22px;letter-spacing:.32em}
+.logo .wm small{font-weight:600;font-size:11px;letter-spacing:.42em;margin-top:3px}
+nav{display:flex;align-items:center;gap:22px}
+nav a.nl{text-decoration:none;font-size:15px;font-weight:500;color:var(--muted)}
+nav a.nl:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{font:500 12px var(--f-mono);letter-spacing:.08em;background:none;border:0;color:var(--muted);padding:6px 11px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+@media (max-width:760px){nav a.nl{display:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding-block:64px 72px}
+.hero h1{font-size:clamp(56px,9vw,128px)}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lede{font-size:20px;max-width:34ch;color:var(--muted);margin:22px 0 30px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:16px;text-decoration:none;border:1px solid var(--ink);cursor:pointer;background:none;color:var(--ink);font-family:var(--f-body)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{transform:translateY(-1px)}
+/* the bowl: a circle with its top sliced flat, like the logo */
+.porthole{position:relative;aspect-ratio:1;max-width:100%;width:min(480px,100%);justify-self:center;clip-path:inset(15% 0 0 0);filter:drop-shadow(0 30px 40px color-mix(in srgb,var(--brand2) 35%,transparent))}
+.porthole .bowl{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:linear-gradient(90deg,var(--brand1),var(--brand2))}
+.porthole canvas{position:absolute;inset:0;width:100%;height:100%}
+.porthole .rec{position:absolute;top:24%;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:#fff;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.porthole .rec i{width:8px;height:8px;border-radius:50%;background:#ff5a5a;animation:blink 1.4s steps(2) infinite}
+.porthole .tc{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:14px;color:#fff;font-variant-numeric:tabular-nums}
+@keyframes blink{50%{opacity:0}}
+@media (max-width:860px){.hero{grid-template-columns:1fr;padding-block:40px 56px}.porthole{width:min(340px,100%)}}
+
+/* sections */
+section{padding-block:72px;border-top:1px solid var(--line)}
+.shead{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
+.shead h2{font-size:clamp(40px,6vw,72px)}
+.shead p{max-width:44ch;color:var(--muted);margin:0}
+
+/* work */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.filters button{font:500 13px var(--f-body);border:1px solid var(--line);background:none;color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 22px}
+@media (max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+.card{display:flex;flex-direction:column;gap:10px;text-decoration:none;min-width:0}
+.thumb{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:6px;overflow:hidden;background:var(--glass)}
+.thumb .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:28px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);opacity:.7}
+.thumb .play{position:absolute;right:12px;bottom:12px;width:40px;height:40px;border-radius:50%;background:var(--surface);display:grid;place-items:center;transition:transform .2s}
+.thumb .play svg{width:14px;height:14px;fill:var(--ink);margin-left:2px}
+.card:hover .play{transform:scale(1.12)}
+.thumb .slug{position:absolute;left:10px;top:10px;font:500 11px var(--f-mono);letter-spacing:.06em;background:var(--surface);color:var(--ink);padding:3px 7px;border-radius:3px}
+.card h3{font-size:26px}
+.meta{display:flex;justify-content:space-between;gap:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.note{margin-top:28px;font-size:14px;color:var(--muted);border:1px dashed var(--line);padding:12px 16px;border-radius:6px}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(2,1fr);gap:0}
+.svc div{padding:26px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:180px 1fr;gap:20px;padding-right:24px}
+.svc h3{font-size:30px}
+.svc p{margin:0;color:var(--muted)}
+@media (max-width:860px){.svc{grid-template-columns:1fr}.svc div{grid-template-columns:1fr;gap:6px;padding-right:0}}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:s}
+.steps li{list-style:none;counter-increment:s;padding-top:18px;border-top:3px solid var(--ink)}
+.steps li::before{content:"0" counter(s);font-family:var(--f-mono);font-size:12px;color:var(--accent);display:block;margin-bottom:8px}
+.steps h3{font-size:26px;margin-bottom:8px}
+.steps p{margin:0;color:var(--muted);font-size:15px}
+.steps{padding:0;margin:0}
+@media (max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+/* about */
+.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+.about .big{font-family:var(--f-display);font-weight:800;font-size:clamp(90px,14vw,190px);line-height:.85;color:var(--accent)}
+.about p{max-width:60ch;margin:0 0 16px}
+@media (max-width:860px){.about{grid-template-columns:1fr;gap:24px}}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.contact h2{font-size:clamp(48px,7vw,96px)}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:24px;font-family:var(--f-mono);font-size:16px}
+.mail span{user-select:all;word-break:break-all}
+.mail button{font:500 12px var(--f-mono);border:1px solid var(--line);background:none;color:var(--ink);padding:6px 10px;border-radius:4px;cursor:pointer}
+form{display:grid;gap:14px;min-width:0}
+label{display:grid;gap:6px;font-size:14px;font-weight:500}
+input,select,textarea{font:16px var(--f-body);padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);width:100%}
+textarea{min-height:120px;resize:vertical}
+.sent{color:var(--accent);font-weight:600;margin:0}
+@media (max-width:860px){.contact{grid-template-columns:1fr;gap:32px}}
+
+footer{border-top:1px solid var(--line);padding-block:28px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="fb-bowl" x1="0" x2="1"><stop offset="0" stop-color="#18a0de"/><stop offset="1" stop-color="#0f48a0"/></linearGradient>
+    <linearGradient id="fb-shade" x1="0" y1="0" x2="1" y2="1"><stop offset=".35" stop-color="#ffffff"/><stop offset="1" stop-color="#c3c7d3"/></linearGradient>
+    <clipPath id="fb-cut"><rect x="0" y="0" width="1096" height="936"/></clipPath>
+    <symbol id="fb-mark" viewBox="0 0 1096 936">
+      <circle cx="548" cy="388" r="548" fill="url(#fb-bowl)" clip-path="url(#fb-cut)"/>
+      <g transform="translate(174 232)">
+        <path fill="#fff" fill-rule="evenodd" d="M0 334V180A180 180 0 0 1 180 0H383Q421 0 421 38V296Q421 334 383 334ZM172 126A48 48 0 1 0 76 126A48 48 0 1 0 172 126Z"/>
+        <path fill="url(#fb-shade)" d="M194 318L354 158V296Q354 318 332 318Z"/>
+        <path fill="#fff" d="M458 152L740 31Q752 27 750 39L727 49V285L750 295Q752 307 740 303L458 182Q440 167 458 152Z"/>
+        <path fill="url(#fb-shade)" d="M600 230L727 160V285Z" opacity=".9"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Fischbowl Productions home">
+      <svg viewBox="0 0 1096 936" aria-hidden="true"><use href="#fb-mark"/></svg>
+      <span class="wm"><b>Fischbowl</b><small>Productions</small></span>
+    </a>
+    <nav>
+      <a class="nl" href="#work" data-i="nav_work">Work</a>
+      <a class="nl" href="#services" data-i="nav_services">Services</a>
+      <a class="nl" href="#about" data-i="nav_about">About</a>
+      <a class="nl" href="#contact" data-i="nav_contact">Contact</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button id="l-en" aria-pressed="true" data-lang="en">EN</button>
+        <button id="l-af" aria-pressed="false" data-lang="af">AF</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <p class="label" data-i="eyebrow">Production &amp; media house · Pretoria</p>
+      <h1 data-i-html="h1">Stories worth <em>looking into.</em></h1>
+      <p class="lede" data-i="lede">Fischbowl makes film, video and content in Afrikaans and English, from the first idea to the final grade.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#work"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg><span data-i="cta_reel">Watch the work</span></a>
+        <a class="btn" href="#contact" data-i="cta_talk">Start a project</a>
+      </div>
+    </div>
+    <div class="porthole" aria-hidden="true">
+      <div class="bowl"><canvas id="water"></canvas></div>
+      <div class="rec"><i></i>REC</div>
+      <div class="tc" id="tc">00:00:00:00</div>
+    </div>
+  </div>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="shead">
+        <h2 data-i="work_h">Selected work</h2>
+        <p data-i="work_p">A few projects from the last five years. Click one to watch it.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter">
+        <button id="f-all" aria-pressed="true" data-f="all" data-i="f_all">All</button>
+        <button id="f-film" aria-pressed="false" data-f="film" data-i="f_film">Film &amp; series</button>
+        <button id="f-doc" aria-pressed="false" data-f="doc" data-i="f_doc">Documentary</button>
+        <button id="f-com" aria-pressed="false" data-f="com" data-i="f_com">Commercial</button>
+        <button id="f-mus" aria-pressed="false" data-f="mus" data-i="f_mus">Music video</button>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="note" data-i="work_note">Example placeholders. Your real project titles, thumbnails and video links go here.</p>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="shead">
+        <h2 data-i="svc_h">What we make</h2>
+        <p data-i="svc_p">One team for the whole job, or just the part you need.</p>
+      </div>
+      <div class="svc">
+        <div><h3 data-i="s1_h">Film &amp; series</h3><p data-i="s1_p">Short films, drama and episodic content, written and shot for local audiences.</p></div>
+        <div><h3 data-i="s2_h">Documentary</h3><p data-i="s2_p">Real people and real places, told with patience and care.</p></div>
+        <div><h3 data-i="s3_h">Brand &amp; commercial</h3><p data-i="s3_p">Adverts, brand films and social content that people actually watch to the end.</p></div>
+        <div><h3 data-i="s4_h">Post-production</h3><p data-i="s4_p">Editing, colour grading, sound and subtitles in Afrikaans and English.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="shead"><h2 data-i="proc_h">How a project runs</h2></div>
+      <ol class="steps">
+        <li><h3 data-i="p1_h">Brief</h3><p data-i="p1_p">We talk about your story, your audience and your budget.</p></li>
+        <li><h3 data-i="p2_h">Pre-production</h3><p data-i="p2_p">Script, storyboard, locations, crew and schedule.</p></li>
+        <li><h3 data-i="p3_h">Shoot</h3><p data-i="p3_p">Cinema cameras, lighting and sound on set or on location.</p></li>
+        <li><h3 data-i="p4_h">Post &amp; delivery</h3><p data-i="p4_p">Edit, grade, mix, subtitles, then delivery for any screen.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about">
+      <div><div class="big">5+</div><p class="label" data-i="ab_years">Years in Afrikaans film &amp; video</p></div>
+      <div>
+        <h2 style="font-size:clamp(40px,6vw,72px);margin-bottom:24px" data-i="ab_h">Why Fischbowl</h2>
+        <p data-i="ab_p1">A fishbowl puts everything on show. That's how we see good storytelling: get close, look properly, and let the audience see what really matters.</p>
+        <p data-i="ab_p2">Fischbowl is led by Ulrich Fisch, who has spent more than five years producing Afrikaans film and video. We work with a trusted network of crew, so every project gets the right people.</p>
+        <p data-i="ab_p3">We are also building Stroom, a streaming home for Afrikaans film, series and culture.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div>
+        <h2 data-i="ct_h">Let's make something.</h2>
+        <p style="color:var(--muted);max-width:40ch" data-i="ct_p">Tell us about your project. We usually reply within one working day.</p>
+        <div class="mail"><span id="addr">ulrich@fischbowlpro.com</span><button id="copy" type="button" data-i="copy">Copy</button></div>
+        <p class="label" style="margin-top:18px">Pretoria, Gauteng · South Africa</p>
+      </div>
+      <form id="cform" novalidate>
+        <label for="c-name"><span data-i="fm_name">Name</span><input id="c-name" required autocomplete="name"></label>
+        <label for="c-email"><span data-i="fm_email">Email</span><input id="c-email" type="email" required autocomplete="email"></label>
+        <label for="c-type"><span data-i="fm_type">Project type</span>
+          <select id="c-type">
+            <option data-i="f_film">Film &amp; series</option><option data-i="f_doc">Documentary</option>
+            <option data-i="f_com">Commercial</option><option data-i="f_mus">Music video</option><option data-i="fm_other">Something else</option>
+          </select></label>
+        <label for="c-msg"><span data-i="fm_msg">Your project</span><textarea id="c-msg"></textarea></label>
+        <button class="btn primary" type="submit" style="justify-self:start" data-i="fm_send">Send message</button>
+        <p class="sent" id="sent" hidden data-i="fm_sent">Preview only: the form will be connected when the site goes live.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 Fischbowl</span><span data-i="foot">Made in Pretoria</span></div></footer>
+
+<script>
+const T={
+en:{},
+af:{
+nav_work:"Werk",nav_services:"Dienste",nav_about:"Oor ons",nav_contact:"Kontak",
+eyebrow:"Produksie- & mediahuis · Pretoria",
+h1:"Stories wat die <em>moeite werd is.</em>",
+lede:"Fischbowl maak films, video en inhoud in Afrikaans en Engels, van die eerste idee tot die finale kleurgradering.",
+cta_reel:"Kyk na ons werk",cta_talk:"Begin 'n projek",
+work_h:"Gekose werk",work_p:"'n Paar projekte van die afgelope vyf jaar. Klik op een om dit te kyk.",
+f_all:"Alles",f_film:"Film & reekse",f_doc:"Dokumentêr",f_com:"Advertensies",f_mus:"Musiekvideo",
+work_note:"Voorbeelde. Jou regte projektitels, foto's en videoskakels kom hier.",
+svc_h:"Wat ons maak",svc_p:"Een span vir die hele projek, of net die deel wat jy nodig het.",
+s1_h:"Film & reekse",s1_p:"Kortfilms, drama en reekse, geskryf en geskiet vir plaaslike kykers.",
+s2_h:"Dokumentêr",s2_p:"Regte mense en regte plekke, vertel met geduld en sorg.",
+s3_h:"Handelsmerk & advertensies",s3_p:"Advertensies, handelsmerkfilms en sosiale media-inhoud wat mense tot die einde kyk.",
+s4_h:"Na-produksie",s4_p:"Redigering, kleurgradering, klank en onderskrifte in Afrikaans en Engels.",
+proc_h:"Hoe 'n projek verloop",
+p1_h:"Opdrag",p1_p:"Ons praat oor jou storie, jou gehoor en jou begroting.",
+p2_h:"Voorproduksie",p2_p:"Draaiboek, storiebord, liggings, span en skedule.",
+p3_h:"Verfilming",p3_p:"Filmkameras, beligting en klank in die ateljee of op ligging.",
+p4_h:"Na-produksie & lewering",p4_p:"Redigering, gradering, klankmenging, onderskrifte en lewering vir enige skerm.",
+ab_years:"Jaar in Afrikaanse film & video",ab_h:"Hoekom Fischbowl",
+ab_p1:"'n Vissiebak wys alles. Só sien ons goeie storievertelling: kom nader, kyk mooi, en wys die gehoor wat regtig saak maak.",
+ab_p2:"Fischbowl word gelei deur Ulrich Fisch, wat al meer as vyf jaar Afrikaanse film en video vervaardig. Ons werk met 'n betroubare netwerk van spanlede, sodat elke projek die regte mense kry.",
+ab_p3:"Ons bou ook Stroom, 'n stroomdiens vir Afrikaanse films, reekse en kultuur.",
+ct_h:"Kom ons maak iets.",ct_p:"Vertel ons van jou projek. Ons antwoord gewoonlik binne een werksdag.",
+copy:"Kopieer",copied:"Gekopieer",fm_name:"Naam",fm_email:"E-pos",fm_type:"Soort projek",fm_other:"Iets anders",
+fm_msg:"Jou projek",fm_send:"Stuur boodskap",fm_sent:"Net 'n voorskou: die vorm word gekoppel wanneer die webwerf regstreeks gaan.",
+foot:"Gemaak in Pretoria",fm_ok:"Dankie! Jou boodskap is gestuur.",fm_err:"Die boodskap kon nie gestuur word nie. Probeer weer, of stuur 'n e-pos.",fm_need:"Vul asseblief jou naam en e-posadres in."
+}};
+// capture English from the page itself
+document.querySelectorAll("[data-i]").forEach(e=>T.en[e.dataset.i]=e.textContent);
+document.querySelectorAll("[data-i-html]").forEach(e=>T.en[e.dataset.iHtml]=e.innerHTML);
+T.en.copied="Copied";T.en.fm_ok="Thanks! Your message has been sent.";T.en.fm_err="The message couldn't be sent. Try again, or send an email.";T.en.fm_need="Please fill in your name and email address.";
+
+const projects=[
+ {c:"film",en:"Short film title",af:"Kortfilm-titel",t:"00:14:32",fmt:"4K · 2.39:1",y:"2025"},
+ {c:"doc",en:"Documentary title",af:"Dokumentêr-titel",t:"00:26:10",fmt:"4K · 16:9",y:"2025"},
+ {c:"com",en:"Brand film",af:"Handelsmerkfilm",t:"00:01:00",fmt:"4K · 16:9",y:"2024"},
+ {c:"mus",en:"Music video",af:"Musiekvideo",t:"00:03:48",fmt:"4K · 2.39:1",y:"2024"},
+ {c:"film",en:"Series episode",af:"Reeks-episode",t:"00:24:00",fmt:"HD · 16:9",y:"2023"},
+ {c:"com",en:"Social campaign",af:"Sosiale veldtog",t:"00:00:30",fmt:"HD · 9:16",y:"2023"}];
+let lang="en",filter="all";
+function renderGrid(){
+ const g=document.getElementById("grid");
+ g.innerHTML=projects.filter(p=>filter==="all"||p.c===filter).map(p=>`
+ <a class="card" href="#work" aria-label="${p[lang]}">
+  <div class="thumb"><span class="slug">${p.fmt}</span><div class="ph">${T[lang]["f_"+p.c]||T.en["f_"+p.c]}</div>
+   <span class="play"><svg viewBox="0 0 12 12"><path d="M1 0l11 6-11 6z"/></svg></span></div>
+  <h3>${p[lang]}</h3>
+  <div class="meta"><span>${T[lang]["f_"+p.c]||T.en["f_"+p.c]}</span><span>${p.y} · TC ${p.t}</span></div>
+ </a>`).join("");
+}
+function setLang(l){
+ lang=l;document.documentElement.lang=l;
+ document.querySelectorAll("[data-i]").forEach(e=>{const v=T[l][e.dataset.i];if(v!=null)e.textContent=v;else e.textContent=T.en[e.dataset.i];});
+ document.querySelectorAll("[data-i-html]").forEach(e=>e.innerHTML=T[l][e.dataset.iHtml]||T.en[e.dataset.iHtml]);
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===l));
+ renderGrid();
+ try{localStorage.setItem("fb-lang",l)}catch(e){}
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderGrid();});
+let saved="en";try{saved=localStorage.getItem("fb-lang")||"en"}catch(e){}
+setLang(saved);
+
+document.getElementById("copy").onclick=async e=>{
+ const btn=e.currentTarget;
+ try{await navigator.clipboard.writeText("ulrich@fischbowlpro.com");btn.textContent=T[lang].copied;}
+ catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById("addr"));const s=getSelection();s.removeAllRanges();s.addRange(r);}
+};
+// Contact form: sends through Web3Forms once the key below is filled in (same free service as Stroom)
+const WEB3FORMS_KEY="PASTE_YOUR_WEB3FORMS_KEY_HERE";
+document.getElementById("cform").onsubmit=async e=>{
+ e.preventDefault();
+ const out=document.getElementById("sent");
+ const name=document.getElementById("c-name").value.trim(),email=document.getElementById("c-email").value.trim();
+ if(!name||!email.includes("@")){out.textContent=T[lang].fm_need||T.en.fm_need;out.hidden=false;return;}
+ if(WEB3FORMS_KEY.startsWith("PASTE")){out.textContent=T[lang].fm_sent||T.en.fm_sent;out.hidden=false;return;}
+ try{
+  const r=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+   body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:"New project enquiry – fischbowlpro.com",name,email,
+    project_type:document.getElementById("c-type").value,message:document.getElementById("c-msg").value})});
+  const j=await r.json();if(!j.success)throw 0;
+  out.textContent=T[lang].fm_ok||T.en.fm_ok;e.target.reset();
+ }catch(_){out.textContent=T[lang].fm_err||T.en.fm_err;}
+ out.hidden=false;
+};
+
+// porthole: water, bubbles and the camera-fish from the logo + running timecode
+const cv=document.getElementById("water"),ctx=cv.getContext("2d");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function size(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;}
+size();addEventListener("resize",size);
+const fishBody=new Path2D("M0 334V180A180 180 0 0 1 180 0H383Q421 0 421 38V296Q421 334 383 334ZM172 126A48 48 0 1 0 76 126A48 48 0 1 0 172 126Z");
+const fishLens=new Path2D("M458 152L740 31Q752 27 750 39L727 49V285L750 295Q752 307 740 303L458 182Q440 167 458 152Z");
+const bubbles=Array.from({length:14},(_,i)=>({x:Math.random(),s:.4+Math.random()*.8,o:Math.random()}));
+const start=performance.now();
+function frame(now){
+ const w=cv.width,h=cv.height,t=(now-start)/1000;
+ ctx.clearRect(0,0,w,h);
+ // soft light bands
+ for(let k=0;k<3;k++){
+  const base=h*(0.66+k*0.08);
+  ctx.beginPath();ctx.moveTo(0,h);
+  for(let x=0;x<=w;x+=w/60)ctx.lineTo(x,base+Math.sin(x/w*Math.PI*(3+k)+t*(0.7+k*0.25))*h*0.02);
+  ctx.lineTo(w,h);ctx.closePath();ctx.fillStyle="rgba(255,255,255,"+(0.06+k*0.04)+")";ctx.fill();
+ }
+ // bubbles
+ ctx.fillStyle="rgba(255,255,255,.35)";
+ bubbles.forEach(b=>{const y=h*(1-((t*0.05*b.s+b.o)%1));ctx.beginPath();ctx.arc(b.x*w+Math.sin(t+b.o*9)*w*.01,y,w*.006*b.s,0,7);ctx.fill();});
+ // camera-fish swims right to left (head first), bobbing gently
+ const sc=w*0.17/750, fw=750*sc;
+ const fx=w-((t*0.06)%1)*(w+fw*2)+fw*0.2, fy=h*0.47+Math.sin(t*1.4)*h*0.015;
+ ctx.save();ctx.translate(fx,fy);ctx.scale(sc,sc);ctx.translate(0,-167);
+ ctx.fillStyle="#fff";ctx.fill(fishBody,"evenodd");ctx.fill(fishLens);ctx.restore();
+ const f=Math.floor(t*25),s=Math.floor(t);
+ document.getElementById("tc").textContent=[Math.floor(s/3600),Math.floor(s/60)%60,s%60,f%25].map(n=>String(n).padStart(2,"0")).join(":");
+ if(!reduce)requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>
