@@ -72,7 +72,7 @@ nav a.nl:hover{color:var(--ink)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn:hover{transform:translateY(-1px)}
 /* the bowl: a circle with its top sliced flat, like the logo */
-.porthole{position:relative;aspect-ratio:1;max-width:100%;width:min(480px,100%);justify-self:center;clip-path:inset(15% 0 0 0);filter:drop-shadow(0 30px 40px color-mix(in srgb,var(--brand2) 35%,transparent))}
+.porthole{cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;aspect-ratio:1;max-width:100%;width:min(480px,100%);justify-self:center;clip-path:inset(15% 0 0 0);filter:drop-shadow(0 30px 40px color-mix(in srgb,var(--brand2) 35%,transparent))}
 .porthole .bowl{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:linear-gradient(90deg,var(--brand1),var(--brand2))}
 .porthole canvas{position:absolute;inset:0;width:100%;height:100%}
 .porthole .rec{position:absolute;top:24%;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:#fff;display:flex;gap:8px;align-items:center;white-space:nowrap}
@@ -444,6 +444,73 @@ size();addEventListener("resize",size);
 const fishBody=new Path2D("M0 334V180A180 180 0 0 1 180 0H383Q421 0 421 38V296Q421 334 383 334ZM172 126A48 48 0 1 0 76 126A48 48 0 1 0 172 126Z");
 const fishLens=new Path2D("M458 152L740 31Q752 27 750 39L727 49V285L750 295Q752 307 740 303L458 182Q440 167 458 152Z");
 const bubbles=Array.from({length:14},(_,i)=>({x:Math.random(),s:.4+Math.random()*.8,o:Math.random()}));
+
+// Fish scenes: usually a calm swim, now and then an easter egg. Tap the bowl to trigger one.
+const SCENES={swim:14,hook:10,leap:9,shy:8,chase:9};
+const EGGS=["hook","leap","shy","chase"];
+let scene={name:"swim",start:performance.now()},lastEgg="";
+function nextScene(now,forceEgg){
+ let name="swim";
+ if(forceEgg||(scene.name==="swim"&&Math.random()<0.45)){const pool=EGGS.filter(e=>e!==lastEgg);name=pool[Math.floor(Math.random()*pool.length)];lastEgg=name;}
+ scene={name,start:now};
+}
+const clamp=p=>Math.max(0,Math.min(1,p)),lerp=(a,b,p)=>a+(b-a)*p,seg=(t,a,b)=>clamp((t-a)/(b-a));
+const easeIn=p=>p*p,easeOut=p=>1-(1-p)*(1-p),ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+function drawFish(x,y,fw,rot,flip,color){
+ const sc=fw/750;ctx.save();ctx.translate(x,y);ctx.rotate(rot||0);ctx.scale(flip?-sc:sc,sc);ctx.translate(-375,-167);
+ ctx.fillStyle=color||"#fff";ctx.fill(fishBody,"evenodd");ctx.fill(fishLens);ctx.restore();
+}
+function exclaim(x,y,fw,alpha){
+ ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle="#fff";ctx.font=`700 ${fw*.42}px "IBM Plex Mono",monospace`;ctx.textAlign="center";ctx.fillText("!",x,y);ctx.restore();
+}
+function burst(x,y,fw,p){ // a ring of bubbles spreading out and fading
+ ctx.save();ctx.fillStyle="rgba(255,255,255,"+(0.6*(1-p))+")";
+ for(let i=0;i<9;i++){const a=i/9*Math.PI*2,r=fw*(.2+.6*p);ctx.beginPath();ctx.arc(x+Math.cos(a)*r,y+Math.sin(a)*r*.6-p*fw*.3,fw*.035*(1-p*.5),0,7);ctx.fill();}
+ ctx.restore();
+}
+function drawScene(now,w,h){
+ let st=(now-scene.start)/1000;
+ if(st>SCENES[scene.name]){nextScene(now);st=0;}
+ const fw=w*0.17,by=h*0.47,bob=Math.sin(now/1000*1.4)*h*0.015;
+ switch(scene.name){
+  case "swim":{ // the original: a gentle swim, right to left
+   drawFish(lerp(w+fw,-fw,st/SCENES.swim),by+bob,fw);break;}
+  case "hook":{ // a line drops in, the fish takes the bait and gets reeled out
+   const hx=w*0.4,s=fw*.13;
+   let hy=lerp(-h*.05,by,easeOut(seg(st,0,2)));
+   if(st<4.6){drawFish(lerp(w+fw,hx+fw/2,easeOut(seg(st,1,4.6))),by+bob*seg(4.6-st,0,1),fw);}
+   else{
+    const yank=easeIn(seg(st,5.4,7.6));hy=lerp(by,-h*.4,yank);
+    const rot=lerp(0,Math.PI/2,ease(seg(st,5.3,5.9)))+Math.sin(st*24)*(st<5.3?.08:.22);
+    drawFish(hx+Math.cos(rot)*fw/2,hy+Math.sin(rot)*fw/2,fw,rot);
+    if(st<5.3)exclaim(hx+fw*.3,by-fw*.35,fw,seg(st,4.6,4.8));
+   }
+   ctx.save();ctx.strokeStyle="rgba(255,255,255,.85)";ctx.lineWidth=Math.max(1.5,fw*.022);ctx.lineCap="round";
+   ctx.beginPath();ctx.moveTo(hx,0);ctx.lineTo(hx,hy+s*.4);ctx.arc(hx-s*.5,hy+s*.4,s*.5,0,Math.PI,false);ctx.lineTo(hx-s*.85,hy+s*.05);ctx.stroke();ctx.restore();
+   break;}
+  case "leap":{ // swims in, jumps clean out of the bowl and plops back in
+   const pos=t=>{const x=lerp(w+fw,-fw,t/SCENES.leap),p=seg(t,3,5.4);return[x,by-Math.sin(Math.PI*p)*h*.62+(p>0&&p<1?0:bob)];};
+   const [x,y]=pos(st),[x2,y2]=pos(st+.03);
+   const flying=st>3&&st<5.4,rot=flying?Math.atan2(-(y2-y),-(x2-x)):0;
+   drawFish(x,y,fw,rot);
+   if(st>5.4&&st<6.3)burst(pos(5.4)[0],by,fw,seg(st,5.4,6.3));
+   break;}
+  case "shy":{ // notices the REC light, panics and swims back the way it came
+   const stop=w*.55;
+   if(st<5.2){drawFish(lerp(w+fw,stop,easeOut(seg(st,0,3.5))),by+bob,fw,Math.sin(st*30)*.05*seg(st,4,4.2)*(st<5.2?1:0));exclaim(stop-fw*.25,by-fw*.4,fw,seg(st,3.9,4.1));}
+   else drawFish(lerp(stop,w+fw*1.3,easeIn(seg(st,5.4,6.4))),by+bob,fw,0,true);
+   break;}
+  case "chase":{ // a much bigger fish shows up; ours makes a quick exit
+   const big=fw*2.8,stop=w*.62;
+   drawFish(lerp(w+big*.6,-big*.7,seg(st,2.4,9)),h*.58+bob*.6,big,0,false,"rgba(3,14,38,.42)");
+   let x=lerp(w+fw,stop,easeOut(seg(st,0,3)));if(st>3.7)x=lerp(stop,-fw*1.2,easeIn(seg(st,3.7,4.7)));
+   drawFish(x,by+bob,fw);
+   if(st>3.1&&st<3.8)exclaim(stop-fw*.25,by-fw*.4,fw,1);
+   break;}
+ }
+}
+const bowlEl=document.querySelector(".porthole");
+if(bowlEl&&!reduce)bowlEl.addEventListener("click",()=>{if(scene.name==="swim")nextScene(performance.now(),true);});
 const start=performance.now();
 function frame(now){
  const w=cv.width,h=cv.height,t=(now-start)/1000;
@@ -458,11 +525,7 @@ function frame(now){
  // bubbles
  ctx.fillStyle="rgba(255,255,255,.35)";
  bubbles.forEach(b=>{const y=h*(1-((t*0.05*b.s+b.o)%1));ctx.beginPath();ctx.arc(b.x*w+Math.sin(t+b.o*9)*w*.01,y,w*.006*b.s,0,7);ctx.fill();});
- // camera-fish swims right to left (head first), bobbing gently
- const sc=w*0.17/750, fw=750*sc;
- const fx=w-((t*0.06)%1)*(w+fw*2)+fw*0.2, fy=h*0.47+Math.sin(t*1.4)*h*0.015;
- ctx.save();ctx.translate(fx,fy);ctx.scale(sc,sc);ctx.translate(0,-167);
- ctx.fillStyle="#fff";ctx.fill(fishBody,"evenodd");ctx.fill(fishLens);ctx.restore();
+ drawScene(now,w,h);
  const f=Math.floor(t*25),s=Math.floor(t);
  document.getElementById("tc").textContent=[Math.floor(s/3600),Math.floor(s/60)%60,s%60,f%25].map(n=>String(n).padStart(2,"0")).join(":");
  if(!reduce)requestAnimationFrame(frame);
